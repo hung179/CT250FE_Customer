@@ -4,8 +4,8 @@
             <SidebarA />
         </template>
 
-        <div class="bg-white w-full h-full rounded-lg">
-            <div class="w-full h-fit flex justify-between items-center">
+        <div class="bg-zinc-50 h-fit w-full rounded-lg">
+            <div class="w-full h-fit flex justify-between items-center p-6">
                 <span class="text-xl">Sản Phẩm</span>
                 <NuxtLink to="/product/new"
                     ><button
@@ -39,7 +39,7 @@
                     </ul>
                     <div class="w-full h-1 rounded-lg bg-zinc-300 absolute"></div>
                     <div
-                        class="animation absolute h-1 top-full rounded-lg bg-emeraild-400 transition-all duration-200 ease-linear delay-0"
+                        class="animation absolute h-1 top-full rounded-lg bg-emerald-400 transition-all duration-200 ease-linear delay-0"
                         :style="{
                             width: underlineWidth + 'px',
                             left: underlineLeft + 'px',
@@ -77,5 +77,5 @@ const setRef = (index) => (el) => {
     itemRefs.value[index] = el;
 };
 
-const total = 10000;
+const total = 0;
 </script>
