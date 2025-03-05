@@ -1,19 +1,23 @@
 <template>
-    <div class="h-screen flex flex-col">
+    <div class="h-screen flex flex-col relative w-full">
         <!-- Header -->
         <Header />
 
-        <div class="flex flex-1">
+        <div class="flex flex-1 h-full pt-14">
             <!-- Sidebar -->
-            <aside class="w-48 text-white">
+            <aside class="w-48 min-w-48 text-white overflow-y-auto scrollbar-gutter-stable">
                 <slot name="sidebar">
                     <Sidebar />
                 </slot>
             </aside>
 
             <!-- Main Content   -->
-            <main class="flex-1 py-6 px-8 bg-zinc-100">
-                <slot />
+            <main class="flex-1 bg-zinc-100 overflow-auto scrollbar-gutter-stable">
+                <div class="w-fit h-full mx-auto">
+                    <div class="w-full h-fit p-6 min-w-5xl max-w-7xl">
+                        <slot />
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -23,3 +27,28 @@
 import Header from "@/components/header.vue";
 import Sidebar from "@/components/sidebar.vue";
 </script>
+<style>
+.scrollbar-gutter-stable {
+    scrollbar-gutter: stable;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+/* Track scrollbar */
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9f9fa9;
+}
+</style>

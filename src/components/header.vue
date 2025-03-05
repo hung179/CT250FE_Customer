@@ -1,21 +1,21 @@
 <template>
-    <div class="w-full h-14 bg-white shadow-sm flex z-50">
-        <div class="w-48 mt-3 mb-2 m-auto">
+    <div class="w-full min-h-14 h-14 bg-white shadow-sm flex z-20 fixed">
+        <div class="w-48 min-w-48 mt-3 mb-2 m-auto">
             <img src="../public/logo2.png" alt="" class="w-full h-full object-contain" />
         </div>
         <div class="flex-1 flex items-center justify-between">
-            <div class="flex items-center">
+            <div class="flex flex-1 items-center whitespace-nowrap">
                 <NuxtLink
                     class="pl-4 text-zinc-400 hover:text-zinc-500 cursor-pointer text-base"
                     to="/"
                     >Trang chủ</NuxtLink
                 >
                 <div v-for="(item, index) in breadcrumb" :key="index">
-                    <span class="mx-2 text-[var(--color-gray)]"> > </span>
+                    <span class="mx-2 text-zinc-400"> > </span>
                     <NuxtLink
                         :to="item.path"
                         :class="[
-                            item.current ? 'text-zinc-400' : 'text-zinc-400 hover:text-zinc-500',
+                            item.current ? 'text-zinc-900' : 'text-zinc-400 hover:text-zinc-500',
                             'cursor-pointer text-base',
                         ]"
                     >
@@ -23,7 +23,7 @@
                     </NuxtLink>
                 </div>
             </div>
-            <div class="h-full w-fit relative">
+            <div class="h-full w-fit relative ml-5">
                 <div
                     class="absolute -left-1 top-1/2 -translate-y-1/2 h-1/2 w-[1px] bg-zinc-300"
                 ></div>

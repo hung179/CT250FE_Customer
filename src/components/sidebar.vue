@@ -16,6 +16,7 @@ import NavButton from "~/components/navButton.vue";
 <style>
 .sidebar::-webkit-scrollbar {
     width: 7px;
+    height: 7px;
 }
 
 /* Track scrollbar */
@@ -30,10 +31,10 @@ import NavButton from "~/components/navButton.vue";
 }
 
 .sidebar:hover::-webkit-scrollbar-thumb {
-    background: var(--color-gray);
+    background: #d4d4d8;
 }
 
 .sidebar:hover::-webkit-scrollbar-thumb:hover {
-    background: var(--color-dark-gray);
+    background: #9f9fa9;
 }
 </style>
