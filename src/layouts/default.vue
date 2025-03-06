@@ -5,10 +5,8 @@
 
         <div class="flex flex-1 h-full pt-14">
             <!-- Sidebar -->
-            <aside class="w-48 min-w-48 text-white overflow-y-auto scrollbar-gutter-stable">
-                <slot name="sidebar">
-                    <Sidebar />
-                </slot>
+            <aside class="w-fit text-white z-10 shadow-xl overflow-y-auto scrollbar-gutter-stable">
+                <slot name="sidebar"> </slot>
             </aside>
 
             <!-- Main Content   -->
@@ -25,7 +23,6 @@
 
 <script setup>
 import Header from "@/components/header.vue";
-import Sidebar from "@/components/sidebar.vue";
 </script>
 <style>
 .scrollbar-gutter-stable {

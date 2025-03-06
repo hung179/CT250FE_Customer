@@ -1,12 +1,12 @@
 <template>
-    <div class="h-fit w-full p-8 rounded-xl bg-white">
+    <div class="h-fit w-full p-8 rounded-lg bg-white shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
         <div class="text-xl font-semibold text-zinc-900 w-full rounded-t-xl bg-zinc-50 mb-10">
             Thông tin cơ bản
         </div>
         <!-- Ảnh bìa -->
         <div class="w-full h-fit">
             <div class="w-full h-fit flex">
-                <div class="w-64 mr-6 flex justify-end text-sm text-zinc-900">
+                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900">
                     <span class="text-red-400 mr-1">*</span>
                     Ảnh bìa sản phẩm
                 </div>
@@ -67,7 +67,7 @@
         <!-- Ảnh sản phẩm -->
         <div class="w-full h-fit mt-10">
             <div class="w-full h-fit flex">
-                <div class="w-64 mr-6 flex justify-end text-sm text-zinc-900">
+                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900">
                     <span class="text-red-400 mr-1">*</span>
                     Ảnh sản phẩm
                 </div>
@@ -133,7 +133,7 @@
         <!-- Tên sản phẩm  -->
         <div class="w-full h-fit mt-10">
             <div class="w-full h-fit flex items-center">
-                <div class="w-64 mr-6 flex justify-end text-sm text-zinc-900">
+                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900">
                     <span class="text-red-400 mr-1">*</span>
                     Tên sản phẩm
                 </div>
@@ -141,14 +141,14 @@
                     <input
                         type="text"
                         id="p_name"
-                        @input="countNameCharacters"
                         v-model="name"
+                        placeholder="Nhập tên sản phẩm"
                         :maxlength="120"
-                        class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-10 outline-none pl-2 pr-20 focus:border-zinc-400"
+                        class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-10 outline-none pl-3 pr-20 focus:border-zinc-400"
                     />
                     <div class="absolute right-0 top-0 w-20 h-10 flex items-center">
                         <div class="h-8 w-[1px] bg-zinc-300"></div>
-                        <p class="w-full text-center mx-2 text-zinc-400">{{ nameCharCount }}/120</p>
+                        <p class="w-full text-center mx-2 text-zinc-400">{{ name.length }}/120</p>
                     </div>
                 </div>
             </div>
@@ -157,7 +157,7 @@
         <!-- Ngành hàng -->
         <div class="w-full h-fit mt-10">
             <div class="w-full h-fit flex items-center">
-                <div class="w-64 mr-6 flex justify-end text-sm text-zinc-900">
+                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900">
                     <span class="text-red-400 mr-1">*</span>
                     Ngành hàng
                 </div>
@@ -166,8 +166,9 @@
                         type="text"
                         id="p_category"
                         v-model="category"
+                        placeholder="Chọn ngành hàng"
                         disabled
-                        class="w-full pointer-events-none cursor-pointer text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 group-hover:border-zinc-400 rounded-md h-10 outline-none pl-2 pr-20 focus:border-zinc-400"
+                        class="w-full pointer-events-none cursor-pointer text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 group-hover:border-zinc-400 rounded-md h-10 outline-none pl-3 pr-20 focus:border-zinc-400"
                     />
                     <div class="absolute right-0 top-0 w-fit h-10 flex items-center justify-center">
                         <div class="h-8 w-[1px] bg-zinc-300"></div>
@@ -181,21 +182,20 @@
         <!-- Mô tả sản phẩm -->
         <div class="w-full h-fit mt-10">
             <div class="w-full h-fit flex">
-                <div class="w-64 mr-6 flex justify-end text-sm text-zinc-900">
+                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900">
                     <span class="text-red-400 mr-1">*</span>
                     Mô tả sản phẩm
                 </div>
                 <div class="flex-1 flex flex-col items-end">
                     <textarea
                         id="p_describe"
-                        @input="countDescribeCharacters"
                         v-model="describe"
                         :maxlength="3000"
-                        class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-48 outline-none p-2 focus:border-zinc-400 resize-none overflow-y-auto"
+                        class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-48 outline-none p-3 focus:border-zinc-400 resize-none overflow-y-auto"
                     ></textarea>
                     <div class="right-0 w-fit h-fit flex items-center">
                         <p class="w-full text-center mx-2 text-zinc-400">
-                            {{ describeCharCount }}/3000
+                            {{ describe.length }}/3000
                         </p>
                     </div>
                 </div>
@@ -252,22 +252,7 @@ const removeImg = (index) => {
 };
 
 const name = ref("");
-const nameCharCount = ref(120);
-const countNameCharacters = () => {
-    if (name.value.length > 120) {
-        name.value = name.value.slice(0, 120); // Cắt chuỗi nếu quá dài
-    }
-    nameCharCount.value = name.value.length; // Cập nhật số ký tự
-};
-
 const describe = ref("");
-const describeCharCount = ref(3000);
-const countDescribeCharacters = () => {
-    if (describe.value.length > 3000) {
-        describe.value = describe.value.slice(0, 3000); // Cắt chuỗi nếu quá dài
-    }
-    describeCharCount.value = describe.value.length; // Cập nhật số ký tự
-};
 
 const showCategoryTable = ref(false);
 </script>

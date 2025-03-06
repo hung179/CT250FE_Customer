@@ -1,5 +1,8 @@
 <template>
-    <nav class="sidebar w-full bg-white overflow-y-auto py-2" style="height: calc(100vh - 56px)">
+    <nav
+        class="sidebar w-48 min-w-48 bg-white overflow-y-auto py-2"
+        style="height: calc(100vh - 56px)"
+    >
         <ul>
             <li>
                 <NuxtLink to="/product/list/all"

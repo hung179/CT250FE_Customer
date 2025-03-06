@@ -1,5 +1,5 @@
 <template>
-    <div class="h-fit w-full p-8 rounded-xl bg-white">
+    <div class="h-fit w-full p-8 rounded-lg bg-white shadow-[0px_0px_10px_rgba(0,0,0,0.1)]">
         <div class="text-xl font-semibold text-zinc-900 w-full rounded-t-xl bg-zinc-50 mb-10">
             Thông tin chi tiết
         </div>
@@ -15,7 +15,8 @@
                         type="text"
                         id="temp"
                         v-model="temp"
-                        class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-10 outline-none pl-2 pr-20 focus:border-zinc-400"
+                        placeholder="Vui lòng nhập giá trị"
+                        class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-10 outline-none p-2 focus:border-zinc-400"
                     />
                 </div>
             </div>
