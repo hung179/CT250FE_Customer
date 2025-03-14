@@ -41,19 +41,20 @@ const route = useRoute();
 
 const breadcrumb = computed(() => {
     // Quản lý sản phẩm - Product
-    if (route.path.includes("/product/list")) {
-        return [{ name: "Sản phẩm", path: "/product/list/all", current: true }];
-    } else if (route.path.includes("/product/new")) {
+    if (route.path.includes("/product/new")) {
         return [
-            { name: "Sản phẩm", path: "/product/list/all" },
+            { name: "Sản phẩm", path: "/product" },
             { name: "Thêm sản phẩm mới", path: route.path, current: true },
         ];
-    } else if (/\/product\/[a-zA-Z0-9]+$/.test(route.path)) {
+    } else if (route.path.includes("/product/detail")) {
         return [
-            { name: "Sản phẩm", path: "/product/list/all" },
+            { name: "Sản phẩm", path: "/product" },
             { name: "Chi tiết sản phẩm", path: route.path, current: true },
         ];
+    } else if (route.path.includes("/product/")) {
+        return [{ name: "Sản phẩm", path: "/product", current: true }];
     }
+
     return [];
 });
 </script>

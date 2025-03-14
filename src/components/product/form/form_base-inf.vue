@@ -11,11 +11,32 @@
                     Ảnh bìa sản phẩm
                 </div>
                 <div class="flex-1 flex">
-                    <div v-if="imageCover" class="relative group w-20 h-20">
+                    <div v-if="props.sanPham.anhBia_SP" class="relative group w-20 h-20">
+                        <!-- Hiển thị ảnh sau khi chọn -->
+                        <img
+                            :src="props.sanPham.anhBia_SP.url"
+                            alt="Product Image"
+                            class="w-full h-full object-cover border-[1px] border-zinc-300 rounded-md"
+                        />
+                        <div
+                            @click="deleteImgCover"
+                            class="absolute bottom-0 w-full h-fit bg-zinc-200 rounded-b-md group-hover:flex justify-center items-center py-1 hidden cursor-pointer"
+                        >
+                            <Icon
+                                name="material-symbols:delete-outline-rounded"
+                                size="18"
+                                class="text-white"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        v-else-if="props.sanPham.fileAnhBia_SP.length != 0"
+                        class="relative group w-20 h-20"
+                    >
                         <!-- Hiển thị ảnh sau khi chọn -->
                         <img
                             :src="imageCover"
-                            alt="Product Image"
+                            alt="Product Image1"
                             class="w-full h-full object-cover border-[1px] border-zinc-300 rounded-md"
                         />
                         <div
@@ -54,6 +75,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <input
                     ref="file"
                     type="file"
@@ -62,6 +84,15 @@
                     @change="handleFileChange_imgCover"
                 />
             </div>
+            <p
+                v-if="
+                    validateField(props.sanPham.fileAnhBia_SP, 'anhBia_SP') !== true &&
+                    validateField(props.sanPham.anhBia_SP) !== true
+                "
+                class="pl-54 text-xs text-red-500 pt-2"
+            >
+                {{ validateField(props.sanPham.fileAnhBia_SP, "anhBia_SP") }}
+            </p>
         </div>
 
         <!-- Ảnh sản phẩm -->
@@ -73,6 +104,29 @@
                 </div>
                 <div class="flex-1">
                     <div class="flex space-x-2 flex-wrap">
+                        <!-- Hiển thị ảnh sản phẩm -->
+                        <div
+                            v-for="(image, index) in props.sanPham.anh_SP"
+                            :key="index"
+                            class="relative group w-20 h-20 rounded-md"
+                        >
+                            <!-- Hiển thị ảnh -->
+                            <img
+                                :src="image.url"
+                                alt="Product Image"
+                                class="w-full h-full object-cover rounded-md border-[1px] border-zinc-300"
+                            />
+                            <div
+                                @click="deleteImg(index, image.public_id)"
+                                class="absolute bottom-0 w-full h-fit bg-zinc-200/90 rounded-b-md group-hover:flex justify-center items-center py-1 hidden cursor-pointer"
+                            >
+                                <Icon
+                                    name="material-symbols:delete-outline-rounded"
+                                    size="18"
+                                    class="text-white"
+                                />
+                            </div>
+                        </div>
                         <!-- Hiển thị các ảnh đã chọn -->
                         <div
                             v-for="(image, index) in images"
@@ -141,17 +195,25 @@
                     <input
                         type="text"
                         id="p_name"
-                        v-model="name"
+                        v-model="props.sanPham.ten_SP"
                         placeholder="Nhập tên sản phẩm"
                         :maxlength="120"
                         class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-10 outline-none pl-3 pr-20 focus:border-zinc-400"
                     />
                     <div class="absolute right-0 top-0 w-20 h-10 flex items-center">
-                        <div class="h-8 w-[1px] bg-zinc-300"></div>
-                        <p class="w-full text-center mx-2 text-zinc-400">{{ name.length }}/120</p>
+                        <div class="h-6 w-[1px] bg-zinc-300"></div>
+                        <p class="w-full text-center mx-2 text-zinc-400">
+                            {{ props.sanPham.ten_SP.length }}/120
+                        </p>
                     </div>
                 </div>
             </div>
+            <p
+                v-if="validateField(props.sanPham.ten_SP, 'ten_SP') !== true"
+                class="pl-54 text-xs text-red-500 pt-2"
+            >
+                {{ validateField(props.sanPham.ten_SP, "ten_SP") }}
+            </p>
         </div>
 
         <!-- Ngành hàng -->
@@ -165,48 +227,66 @@
                     <input
                         type="text"
                         id="p_category"
-                        v-model="category"
+                        v-model="formattedCategoriesSelected"
                         placeholder="Chọn ngành hàng"
                         disabled
                         class="w-full pointer-events-none cursor-pointer text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 group-hover:border-zinc-400 rounded-md h-10 outline-none pl-3 pr-20 focus:border-zinc-400"
                     />
                     <div class="absolute right-0 top-0 w-fit h-10 flex items-center justify-center">
-                        <div class="h-8 w-[1px] bg-zinc-300"></div>
+                        <div class="h-6 w-[1px] bg-zinc-300"></div>
                         <Icon name="ic:outline-edit" class="text-zinc-400 mx-4" size="20px" />
                     </div>
                 </div>
             </div>
+            <p
+                v-if="validateField(formattedCategoriesSelected) !== true"
+                class="pl-54 text-xs text-red-500 pt-2"
+            >
+                {{ validateField(formattedCategoriesSelected) }}
+            </p>
         </div>
-        <categoryTable v-if="showCategoryTable" @close="showCategoryTable = false" />
+        <CategoryTableForm
+            v-if="showCategoryTable"
+            @close="showCategoryTable = false"
+            @confirm="handlecategoriesSelected"
+            :categoriesSelected="categorySelected"
+            :categories="categories"
+        />
 
         <!-- Mô tả sản phẩm -->
         <div class="w-full h-fit mt-10">
             <div class="w-full h-fit flex">
-                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900">
+                <div class="w-48 mr-6 flex justify-end text-sm text-zinc-900" @click="a()">
                     <span class="text-red-400 mr-1">*</span>
                     Mô tả sản phẩm
                 </div>
                 <div class="flex-1 flex flex-col items-end">
                     <textarea
                         id="p_describe"
-                        v-model="describe"
+                        v-model="props.sanPham.moTa_SP"
                         :maxlength="3000"
                         class="w-full text-sm text-zinc-900 bg-transparent border-[1px] border-zinc-300 hover:border-zinc-400 rounded-md h-48 outline-none p-3 focus:border-zinc-400 resize-none overflow-y-auto"
                     ></textarea>
                     <div class="right-0 w-fit h-fit flex items-center">
                         <p class="w-full text-center mx-2 text-zinc-400">
-                            {{ describe.length }}/3000
+                            {{ props.sanPham.moTa_SP.length }}/3000
                         </p>
                     </div>
                 </div>
             </div>
+            <p
+                v-if="validateField(props.sanPham.moTa_SP, 'moTa_SP') !== true"
+                class="pl-54 text-xs text-red-500 pt-2"
+            >
+                {{ validateField(props.sanPham.moTa_SP, "moTa_SP") }}
+            </p>
         </div>
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
-import categoryTable from "~/components/product/category-table.vue";
+const props = defineProps(["sanPham"]);
 
 const totalImg = ref(0);
 const imageCover = ref(null);
@@ -214,12 +294,14 @@ const imageCover = ref(null);
 const handleFileChange_imgCover = (event) => {
     const file = event.target.files[0];
     if (file) {
+        props.sanPham.fileAnhBia_SP?.push(file);
         const reader = new FileReader();
         reader.onload = () => {
             imageCover.value = reader.result;
         };
         reader.readAsDataURL(file);
     }
+    event.target.value = "";
 };
 
 const images = ref([]);
@@ -232,6 +314,7 @@ const handleFileChange_imgs = (event) => {
         const filesToProcess = filesArray.slice(0, maxFiles - images.value.length);
 
         filesToProcess.forEach((file) => {
+            props.sanPham.fileAnh_SP?.push(file);
             totalImg.value++;
             const reader = new FileReader();
             reader.onload = () => {
@@ -244,6 +327,12 @@ const handleFileChange_imgs = (event) => {
 
 const removeImgCover = () => {
     imageCover.value = null;
+    props.sanPham.fileAnhBia_SP = [];
+};
+
+const deleteImgCover = () => {
+    props.sanPham.anhBia_SP = null;
+    props.sanPham.ttAnhXoa_SP?.push(props.sanPham.anhBia_SP?.public_id);
 };
 
 const removeImg = (index) => {
@@ -251,8 +340,127 @@ const removeImg = (index) => {
     images.value.splice(index, 1);
 };
 
-const name = ref("");
-const describe = ref("");
+const deleteImg = (index, public_id) => {
+    props.sanPham.anh_SP.splice(index, 1);
+    props.sanPham.ttAnhXoa_SP?.push(public_id);
+};
+
+const categories = ref([]);
+
+const getCategoryAttributes = (categoryId) => {
+    let attrs = [];
+    let seen = new Set(); // Tránh trùng lặp thuộc tính
+    let currentCategory = categories.value.find((cat) => cat._id === categoryId);
+
+    while (currentCategory) {
+        if (currentCategory.dsThuocTinh_NH?.length) {
+            currentCategory.dsThuocTinh_NH.forEach((attr) => {
+                if (!seen.has(attr)) {
+                    seen.add(attr);
+                    attrs.push({ thuocTinh_CTSP: attr, giaTri_CTSP: "" }); // Lưu theo cặp
+                }
+            });
+        }
+        if (!currentCategory.idCha_NH) break;
+        currentCategory = categories.value.find((cat) => cat._id === currentCategory.idCha_NH);
+    }
+
+    return attrs;
+};
+
+const authStore = useAuthStore();
+const { $api } = useNuxtApp(); // ✅ Truy cập api từ plugin
+async function getCategory() {
+    try {
+        const res = await $api.get("/categories");
+        if (res.data.success) {
+            categories.value = res.data.data;
+        }
+    } catch (error) {
+        console.error("Lỗi:", error);
+    }
+}
+
+const categorySelected = ref(null);
+
+const findCategoryPath = (id) => {
+    const category = categories.value.find((cat) => cat._id === id);
+    if (!category) return { category1: null, category2: null, category3: null };
+
+    if (category.cap_NH === 1) {
+        return { category1: category, category2: null, category3: null };
+    }
+
+    if (category.cap_NH === 2) {
+        const parent1 = categories.value.find((cat) => cat._id === category.idCha_NH);
+        return { category1: parent1 || null, category2: category, category3: null };
+    }
+
+    if (category.cap_NH === 3) {
+        const parent2 = categories.value.find((cat) => cat._id === category.idCha_NH);
+        const parent1 = categories.value.find((cat) => cat._id === parent2?.idCha_NH);
+        return { category1: parent1 || null, category2: parent2 || null, category3: category };
+    }
+
+    return { category1: null, category2: null, category3: null };
+};
+
+const getCategoryPathString = (_id) => {
+    const categoryPath = findCategoryPath(_id);
+    categorySelected.value = findCategoryPath(_id);
+    return [
+        categoryPath.category1?.ten_NH,
+        categoryPath.category2?.ten_NH,
+        categoryPath.category3?.ten_NH,
+    ]
+        .filter(Boolean)
+        .join(" > ");
+};
+
+const formattedCategoriesSelected = ref("Chọn ngành hàng");
+
+const updateCategoriesSelected = (id) => {
+    formattedCategoriesSelected.value = getCategoryPathString(id);
+};
+
+const handlecategoriesSelected = (data) => {
+    updateCategoriesSelected(data._id);
+    props.sanPham.nganhHang_SP = data._id;
+    props.sanPham.ttChiTiet_SP = getCategoryAttributes(data._id);
+    console.log(props.sanPham);
+};
+const validateField = (value, fieldType) => {
+    if (fieldType === "anhBia_SP" && (!value || value.length === 0 || value === null))
+        return "Vui lòng tải lên ảnh bìa";
+
+    if (!value) return "Không được để trống ô";
+
+    if (fieldType === "ten_SP" && value.length < 10) return "Tên sản phẩm phải có ít nhất 10 ký tự";
+
+    if (fieldType === "moTa_SP" && value.length < 100) return "Mô tả sản phẩm ít nhất 100 ký tự";
+
+    return true;
+};
+
+const validateForm = () => {
+    if (
+        validateField(props.sanPham.fileAnhBia_SP, "anhBia_SP") !== true &&
+        validateField(props.sanPham.anhBia_SP, "anhBia_SP") !== true
+    )
+        return false;
+    if (validateField(props.sanPham.nganhHang_SP) !== true) return false;
+    if (validateField(props.sanPham.ten_SP, "ten_SP") !== true) return false;
+    if (validateField(props.sanPham.moTa_SP, "moTa_SP") !== true) return false;
+
+    return true;
+};
+
+onMounted(async () => {
+    await getCategory();
+    updateCategoriesSelected(props.sanPham.nganhHang_SP);
+});
 
 const showCategoryTable = ref(false);
+
+defineExpose({ validateForm });
 </script>

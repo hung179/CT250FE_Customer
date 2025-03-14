@@ -22,42 +22,35 @@
                     </div>
                     <div class="w-full min-h-18 h-fit px-6 overflow-auto">
                         <div class="w-full h-fit p-4 bg-zinc-100 rounded-md">
-                            <div class="w-full h-8 flex flex-row">
-                                <div
-                                    class="w-64 px-3 h-full bg-zinc-50 rounded-sm border-[1px] border-zinc-300 flex items-center space-x-2 cursor-pointer group focus-within:border-zinc-400"
-                                >
-                                    <input
-                                        type="text"
-                                        placeholder="Vui lòng nhập tối thiểu 1 ký tự."
-                                        class="h-full w-full focus:ring-0 outline-none py-2 text-xs text-zinc-600"
-                                    />
-                                    <Icon
-                                        name="material-symbols:search-rounded"
-                                        size="22"
-                                        class="text-zinc-400"
-                                    />
-                                </div>
-                            </div>
                             <div
                                 class="w-full h-fit overflow-auto flex flex-row mt-4 bg-zinc-50 rounded-md py-4"
                             >
                                 <div class="flex-1 h-76 overflow-y-auto">
-                                    <categoryList
-                                        :categories="categories"
+                                    <CategoryListForm
+                                        :categories="category1"
+                                        :selected="category1Selected"
+                                        :parent="{ _id: null }"
+                                        :key="category1"
                                         @categorySelected="handleCategory1Selected"
                                     />
                                 </div>
                                 <div
                                     class="flex-1 h-76 overflow-y-auto border-x-[1px] border-zinc-200"
                                 >
-                                    <categoryList
-                                        :categories="categories"
+                                    <CategoryListForm
+                                        :categories="category2"
+                                        :selected="category2Selected"
+                                        :parent="category1Selected"
+                                        :key="category2"
                                         @categorySelected="handleCategory2Selected"
                                     />
                                 </div>
                                 <div class="flex-1 h-76 overflow-y-auto">
-                                    <categoryList
-                                        :categories="categories"
+                                    <CategoryListForm
+                                        :categories="category3"
+                                        :selected="category3Selected"
+                                        :parent="category2Selected"
+                                        :key="category3"
                                         @categorySelected="handleCategory3Selected"
                                     />
                                 </div>
@@ -68,13 +61,21 @@
                         <div class="w-fit h-full flex items-center space-x-2">
                             <span class="text-sm text-zinc-700">Đã chọn : </span>
                             <span class="text-sm text-zinc-700 font-semibold">
-                                {{ category1 }}
+                                {{ category1Selected ? category1Selected.ten_NH : "" }}
                             </span>
-                            <span v-if="category2" class="text-sm text-zinc-700 font-semibold">
-                                <span> > </span> {{ category2 }}
+                            <span
+                                v-if="category2Selected"
+                                class="text-sm text-zinc-700 font-semibold"
+                            >
+                                <span> > </span>
+                                {{ category2Selected ? category2Selected.ten_NH : "" }}
                             </span>
-                            <span v-if="category3" class="text-sm text-zinc-700 font-semibold">
-                                <span> > </span> {{ category3 }}
+                            <span
+                                v-if="category3Selected"
+                                class="text-sm text-zinc-700 font-semibold"
+                            >
+                                <span> > </span>
+                                {{ category3Selected ? category3Selected.ten_NH : "" }}
                             </span>
                         </div>
                         <div class="flex h-full w-fit items-center space-x-4">
@@ -85,6 +86,7 @@
                                 <span>Hủy</span>
                             </button>
                             <button
+                                @click="confirm"
                                 class="px-4 h-full text-sm font-medium bg-emerald-400 hover:bg-emerald-500 text-white rounded-md cursor-pointer"
                             >
                                 <span>Xác nhận</span>
@@ -97,27 +99,45 @@
     </div>
 </template>
 <script setup>
-import categoryList from "./category-list.vue";
+const props = defineProps({
+    categoriesSelected: Object,
+    categories: Object,
+});
 
-const category1 = ref("");
-const category2 = ref("");
-const category3 = ref("");
+const category1 = computed(() => props.categories.filter((cat) => cat.cap_NH === 1));
+const category2 = computed(() => props.categories.filter((cat) => cat.cap_NH === 2));
+const category3 = computed(() => props.categories.filter((cat) => cat.cap_NH === 3));
 
-const handleCategory1Selected = (category) => {
-    console.log(category);
-    category1.value = category.name;
-};
-const handleCategory2Selected = (category) => {
-    console.log(category);
-    category2.value = category.name;
-};
-const handleCategory3Selected = (category) => {
-    console.log(category);
-    category3.value = category.name;
-};
+const category1Selected = ref(props.categoriesSelected.category1);
+const category2Selected = ref(props.categoriesSelected.category2);
+const category3Selected = ref(props.categoriesSelected.category3);
 
-const categories = [];
-const emit = defineEmits(["close"]);
+const handleCategory1Selected = (category1) => {
+    category1Selected.value = category1;
+};
+const handleCategory2Selected = (category2) => {
+    category2Selected.value = category2;
+};
+const handleCategory3Selected = (category3) => {
+    category3Selected.value = category3;
+};
+const emit = defineEmits(["close", "confirm"]);
+
+const confirm = () => {
+    const selectedCategories = [
+        category1Selected.value,
+        category2Selected.value,
+        category3Selected.value,
+    ].filter(Boolean);
+
+    const lowestCategory = selectedCategories.reduce(
+        (lowest, current) => (current.cap_NH > (lowest?.cap_NH || 0) ? current : lowest),
+        null
+    );
+
+    emit("confirm", { _id: lowestCategory?._id || null });
+    emit("close");
+};
 </script>
 <style>
 ::-webkit-scrollbar {

@@ -1,29 +1,23 @@
 <template>
-    <div class="h-screen flex flex-col relative w-full">
+    <div class="h-screen flex flex-col relative w-full bg-white">
         <!-- Header -->
         <Header />
 
         <div class="flex flex-1 h-full pt-14">
             <!-- Sidebar -->
-            <aside class="w-fit text-white z-10 shadow-xl overflow-y-auto scrollbar-gutter-stable">
-                <slot name="sidebar"> </slot>
+            <aside class="w-fit text-white z-10 shadow-lg overflow-y-auto scrollbar-gutter-stable">
+                <Sidebar />
             </aside>
 
             <!-- Main Content   -->
-            <main class="flex-1 bg-zinc-100 overflow-auto scrollbar-gutter-stable">
-                <div class="w-fit h-full mx-auto">
-                    <div class="w-full h-fit p-6 min-w-5xl max-w-7xl">
-                        <slot />
-                    </div>
-                </div>
+            <main class="flex-1 bg-zinc-200/60 overflow-auto scrollbar-gutter-stable">
+                <slot />
             </main>
         </div>
     </div>
 </template>
 
-<script setup>
-import Header from "@/components/header.vue";
-</script>
+<script setup></script>
 <style>
 .scrollbar-gutter-stable {
     scrollbar-gutter: stable;

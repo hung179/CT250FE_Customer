@@ -3,6 +3,6 @@
 </template>
 <script setup>
 definePageMeta({
-    redirect: "/product/live",
+    redirect: "/sale/unpaid",
 });
 </script>

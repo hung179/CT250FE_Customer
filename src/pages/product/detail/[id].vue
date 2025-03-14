@@ -1,8 +1,12 @@
 <template>
-    <ProductForm @submit="handleSubmit" />
+    <div>
+        <ProductForm :id="id" @submit="handleSubmit" />
+    </div>
 </template>
-
 <script setup>
+const route = useRoute();
+const id = route.params.id;
+
 const handleSubmit = (sanPham) => {
     const formData = new FormData();
     formData.append("fileAnhBia_SP", sanPham.fileAnhBia_SP[0]);
@@ -16,8 +20,9 @@ const handleSubmit = (sanPham) => {
     formData.append(`ttChiTiet_SP`, JSON.stringify(sanPham.ttChiTiet_SP));
     formData.append("ttBanHang_SP", JSON.stringify(sanPham.ttBanHang_SP));
     formData.append("phanLoai_SP", JSON.stringify(sanPham.phanLoai_SP));
+    formData.append("ttAnhXoa_SP", JSON.stringify(sanPham.ttAnhXoa_SP));
 
-    create(formData);
+    update(formData);
 };
 
 const authStore = useAuthStore();
@@ -25,29 +30,30 @@ const { $api } = useNuxtApp(); // ✅ Truy cập api từ plugin
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-async function create(product) {
+async function update(product) {
     try {
-        const res = await $api.post("products", product);
-        if (res.data.success == true) {
+        const res = await $api.put(`products/${id}`, product);
+        if (res.data.success) {
             showSuccess();
+            router.push("/product");
         } else {
             router.push("/product");
         }
     } catch (error) {
         console.error("Lỗi:", error);
         showError();
+        router.push("/product");
     }
-    router.push("/product");
 }
 
 import { useToast } from "vue-toastification";
 const toast = useToast();
 
 const showSuccess = () => {
-    toast.success("Sản phẩm được thêm thành công");
+    toast.success("Sản phẩm được cập nhật thành công");
 };
 
 const showError = () => {
-    toast.error("Có lỗi xảy ra, không thể thêm sản phẩm!");
+    toast.error("Có lỗi xảy ra, không thể cập nhật sản phẩm!");
 };
 </script>
