@@ -1,9 +1,9 @@
 <template>
-    <nav class="sidebar w-48 min-w-48 bg-white h-full py-2" style="height: calc(100vh - 56px)">
+    <nav class=" sidebar w-48 min-w-48 bg-white h-full py-2" style="height: calc(100vh - 56px)">
         <ul>
             <li>
-                <div class="w-full h-fit font-medium text-zinc-500 p-2">Quản lý sản phẩm</div>
-                <NuxtLink to="/product/live">
+                <div class="w-full h-fit font-medium text-zinc-500 p-2">Hóa đơn</div>
+                <NuxtLink to="/bill/">
                     <button
                         @click="active = 1"
                         class="text-left cursor-pointer py-1 text-sm font-normal w-full h-fit pl-5"
@@ -13,11 +13,15 @@
                                 : 'text-zinc-400 hover:text-emerald-400'
                         "
                     >
-                        Tất cả sản phẩm
-                    </button>
+                    Theo dõi hóa đơn
+                </button>
                 </NuxtLink>
-                <NuxtLink to="/product/new" @click="active = 2"
-                    ><button
+            </li>
+            <li>
+                <div class="w-full h-fit font-medium text-zinc-500 p-2">Quản lý tài khoản</div>
+                <NuxtLink to="/userinformation/">
+                    <button
+                        @click="active = 2"
                         class="text-left cursor-pointer py-1 text-sm font-normal w-full h-fit pl-5"
                         :class="
                             active === 2
@@ -25,13 +29,10 @@
                                 : 'text-zinc-400 hover:text-emerald-400'
                         "
                     >
-                        Thêm mới sản phẩm
+                        Thông tin cá nhân
                     </button>
                 </NuxtLink>
-            </li>
-            <li>
-                <div class="w-full h-fit font-medium text-zinc-500 p-2">Quản lý danh mục</div>
-                <NuxtLink to="/category/">
+                <NuxtLink to="/address/">
                     <button
                         @click="active = 3"
                         class="text-left cursor-pointer py-1 text-sm font-normal w-full h-fit pl-5"
@@ -41,11 +42,16 @@
                                 : 'text-zinc-400 hover:text-emerald-400'
                         "
                     >
-                        Tất cả danh mục
+                        Thông tin nhận hàng
                     </button>
                 </NuxtLink>
-                <NuxtLink to="/category/new" @click="active = 4"
-                    ><button
+            </li>
+            <li>
+                <div class="w-full h-fit font-medium text-zinc-500 p-2">
+                    Thông tin về nhà sách</div>
+                <NuxtLink to="/BookStoreInformation/">
+                    <button
+                        @click="active = 4"
                         class="text-left cursor-pointer py-1 text-sm font-normal w-full h-fit pl-5"
                         :class="
                             active === 4
@@ -53,23 +59,8 @@
                                 : 'text-zinc-400 hover:text-emerald-400'
                         "
                     >
-                        Thêm ngành hàng mới
-                    </button>
-                </NuxtLink>
-            </li>
-            <li>
-                <NuxtLink to="/sale/">
-                    <button
-                        @click="active = 5"
-                        class="text-left cursor-pointer py-1 font-medium w-full h-fit p-2"
-                        :class="
-                            active === 5
-                                ? 'text-emerald-400 font-semibold'
-                                : 'text-zinc-500 hover:text-emerald-400'
-                        "
-                    >
-                        Quản lý đơn hàng
-                    </button>
+                    Thông tin nhà sách
+                </button>
                 </NuxtLink>
             </li>
         </ul>
@@ -85,7 +76,6 @@ const active = ref(0);
     height: 7px;
 }
 
-/* Track scrollbar */
 .sidebar::-webkit-scrollbar-track {
     background: transparent;
     border-radius: 10px;
